@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AITD.Events Platform</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        'primary-orange': '#FF6B35',
+                        'secondary-orange': '#FFA500',
+                        'dark-orange': '#E55100',
+                        'light-orange-bg': '#FFF4E6',
+                        'primary-navy': '#001A4D', // Kept for dark text
+                        'dark-bg': '#121212',
+                        'dark-card': '#1e1e1e',
+                    },
+                    fontFamily: {
+                        sans: ['Poppins', 'sans-serif'],
+                    },
+                    keyframes: {
+                        'fade-in-up': {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                        'skeleton-loading': {
+                            '0%': { 'background-position': '200% 0' },
+                            '100%': { 'background-position': '-200% 0' },
+                        },
+                        'like-pop': {
+                            '0%': { transform: 'scale(0.5)', opacity: '0.8' },
+                            '50%': { transform: 'scale(1.2)', opacity: '1' },
+                            '100%': { transform: 'scale(1.1)', opacity: '0' },
+                        },
+                        'float': {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-6px)' },
+                        },
+                        'stagger-in': {
+                            '0%': { opacity: '0', transform: 'translateY(15px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                        'slide-in-right': {
+                            'from': { transform: 'translateX(100%)', opacity: '0' },
+                            'to': { transform: 'translateX(0)', opacity: '1' },
+                        },
+                        'slide-out-right': {
+                            'from': { transform: 'translateX(0)', opacity: '1' },
+                            'to': { transform: 'translateX(100%)', opacity: '0' },
+                        },
+                         'message-in': {
+                            '0%': { opacity: '0', transform: 'translateY(15px) scale(0.95)' },
+                            '100%': { opacity: '1', transform: 'translateY(0) scale(1)' },
+                        }
+                    },
+                    animation: {
+                        'fade-in-up': 'fade-in-up 0.5s ease-out forwards',
+                        'skeleton': 'skeleton-loading 8s ease-in-out infinite',
+                        'like-pop': 'like-pop 0.6s ease-in-out forwards',
+                        'float': 'float 6s ease-in-out infinite',
+                        'stagger-in': 'stagger-in 0.5s ease-out forwards',
+                        'slide-in-right': 'slide-in-right 0.5s ease-out forwards',
+                        'slide-out-right': 'slide-out-right 0.5s ease-out forwards',
+                        'message-in': 'message-in 0.4s ease-out forwards',
+                    },
+                },
+            },
+        };
+    </script>
+<script type="importmap">
+{
+  "imports": {
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
+    "react/": "https://aistudiocdn.com/react@^19.2.0/",
+    "react": "https://aistudiocdn.com/react@^19.2.0",
+    "react-router-dom": "https://aistudiocdn.com/react-router-dom@^6.24.0",
+    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.28.0",
+    "canvas-confetti": "https://aistudiocdn.com/canvas-confetti@^1.9.3"
+  }
+}
+</script>
+<style>
+    body.dark {
+        background-color: #0d0d0d;
+        background-image: 
+            radial-gradient(at 80% 20%, hsla(28,100%,53%,0.15) 0px, transparent 50%),
+            radial-gradient(at 20% 90%, hsla(20,100%,50%,0.1) 0px, transparent 50%);
+        background-attachment: fixed;
+    }
+    * {
+        transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+    }
+     .glass-effect {
+        background-color: rgba(255, 255, 255, 0.75);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+    }
+    .dark .glass-effect {
+        background-color: rgba(28, 28, 30, 0.7);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .ripple {
+        position: relative;
+        overflow: hidden;
+    }
+    .ripple:after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 5px;
+        height: 5px;
+        background: rgba(255, 255, 255, 0.5);
+        opacity: 0;
+        border-radius: 100%;
+        transform: scale(1, 1) translate(-50%);
+        transform-origin: 50% 50%;
+    }
+    .ripple:focus:not(:active):after, .ripple:active:after {
+        animation: ripple 1s ease-out;
+    }
+    @keyframes ripple {
+        0% {
+            transform: scale(0, 0) translate(-50%);
+            opacity: 1;
+        }
+        100% {
+            transform: scale(20, 20) translate(-50%);
+            opacity: 0;
+        }
+    }
+    @keyframes slow-ping {
+      75%, 100% {
+        transform: scale(2);
+        opacity: 0;
+      }
+    }
+    .animate-slow-ping {
+      animation: slow-ping 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+    }
+    .no-scrollbar::-webkit-scrollbar {
+        display: none;
+    }
+    .no-scrollbar {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+    .skeleton-loader {
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+        background-size: 200% 100%;
+        animation: skeleton-loading 1.5s infinite;
+    }
+
+    /* Neon glow for specific elements */
+    .neon-orange-glow {
+        transition: text-shadow 0.3s ease;
+    }
+    .neon-orange-glow:hover {
+        text-shadow: 0 0 8px rgba(255, 107, 53, 0.8);
+    }
+    .neon-orange-box-shadow {
+        box-shadow: 0 0 5px rgba(255, 107, 53, 0.6), 0 0 10px rgba(255, 107, 53, 0.4);
+    }
+    .neon-orange-box-shadow:hover {
+        box-shadow: 0 0 10px rgba(255, 107, 53, 0.8), 0 0 20px rgba(255, 107, 53, 0.6);
+    }
+
+    /* 3D Card Hover Effect */
+    .card-3d-hover {
+        transform-style: preserve-3d;
+    }
+    .card-3d-hover:hover {
+        transform: perspective(1000px) rotateY(var(--rotate-y, 0)) rotateX(var(--rotate-x, 0)) scale3d(1.05, 1.05, 1.05);
+    }
+    
+    /* Gradient Text */
+    .gradient-text {
+        background: linear-gradient(45deg, #FF6B35, #FFA500);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        text-fill-color: transparent;
+    }
+</style>
+<link rel="stylesheet" href="/index.css">
+</head>
+<body class="bg-white dark:bg-dark-bg">
+    <div id="root"></div>
+    <script type="module" src="/index.tsx"></script>
+</body>
+</html>

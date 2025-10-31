@@ -1,0 +1,8 @@
+{
+  "name": "AITD.Events Platform",
+  "description": "A comprehensive platform for AITD students to discover events, share reels, chat with the community, earn rewards, and manage their professional profile.",
+  "requestFramePermissions": [
+    "microphone",
+    "camera"
+  ]
+}
