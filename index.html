@@ -15,13 +15,16 @@
             theme: {
                 extend: {
                     colors: {
-                        'primary-orange': '#FF6B35',
-                        'secondary-orange': '#FFA500',
+                        'primary-orange': '#6A5ACD', // Slate Blue
+                        'secondary-orange': '#FF69B4', // Hot Pink
                         'dark-orange': '#E55100',
-                        'light-orange-bg': '#FFF4E6',
+                        'light-orange-bg': '#F0F8FF', // Alice Blue
                         'primary-navy': '#001A4D', // Kept for dark text
-                        'dark-bg': '#121212',
-                        'dark-card': '#1e1e1e',
+                        'dark-bg': '#1A1A2E',
+                        'dark-card': '#162447',
+                        'dark-border': '#1F4068',
+                        'text-main': '#EAEAEA',
+                        'text-light': '#B8B8B8',
                     },
                     fontFamily: {
                         sans: ['Poppins', 'sans-serif'],
@@ -59,7 +62,19 @@
                          'message-in': {
                             '0%': { opacity: '0', transform: 'translateY(15px) scale(0.95)' },
                             '100%': { opacity: '1', transform: 'translateY(0) scale(1)' },
-                        }
+                        },
+                        'subtle-float': {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-3px)' },
+                        },
+                        'scale-in': {
+                            '0%': { transform: 'scale(0.95)', opacity: '0' },
+                            '100%': { transform: 'scale(1)', opacity: '1' },
+                        },
+                        'fade-in-down': {
+                            '0%': { opacity: '0', transform: 'translateY(-10px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
                     },
                     animation: {
                         'fade-in-up': 'fade-in-up 0.5s ease-out forwards',
@@ -70,6 +85,9 @@
                         'slide-in-right': 'slide-in-right 0.5s ease-out forwards',
                         'slide-out-right': 'slide-out-right 0.5s ease-out forwards',
                         'message-in': 'message-in 0.4s ease-out forwards',
+                        'subtle-float': 'subtle-float 4s ease-in-out infinite',
+                        'scale-in': 'scale-in 0.4s ease-out forwards',
+                        'fade-in-down': 'fade-in-down 0.5s ease-out forwards',
                     },
                 },
             },
@@ -88,24 +106,30 @@
 }
 </script>
 <style>
+    body {
+        background-color: #F0F8FF; /* light-bg */
+    }
     body.dark {
-        background-color: #0d0d0d;
+        background-color: #1A1A2E; /* dark-bg */
         background-image: 
-            radial-gradient(at 80% 20%, hsla(28,100%,53%,0.15) 0px, transparent 50%),
-            radial-gradient(at 20% 90%, hsla(20,100%,50%,0.1) 0px, transparent 50%);
+            radial-gradient(at 15% 85%, hsla(240, 67%, 56%, 0.15) 0px, transparent 50%),
+            radial-gradient(at 85% 15%, hsla(320, 80%, 60%, 0.15) 0px, transparent 50%);
         background-attachment: fixed;
     }
     * {
-        transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+        transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
     }
      .glass-effect {
-        background-color: rgba(255, 255, 255, 0.75);
-        backdrop-filter: blur(16px);
-        -webkit-backdrop-filter: blur(16px);
+        background-color: rgba(255, 255, 255, 0.6);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
     }
     .dark .glass-effect {
-        background-color: rgba(28, 28, 30, 0.7);
-        border: 1px solid rgba(255, 255, 255, 0.1);
+        background-color: rgba(22, 36, 71, 0.6); /* dark-card with alpha */
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid #1F4068; /* dark-border */
     }
     .ripple {
         position: relative;
@@ -192,7 +216,7 @@
 </style>
 <link rel="stylesheet" href="/index.css">
 </head>
-<body class="bg-white dark:bg-dark-bg">
+<body class="dark:bg-dark-bg">
     <div id="root"></div>
     <script type="module" src="/index.tsx"></script>
 </body>
